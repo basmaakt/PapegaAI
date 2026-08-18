@@ -141,7 +141,8 @@ The result is `dist-<rid>/` plus a tarball. Self-contained: the target machine
 needs no .NET. About 150 MB, most of it the Vulkan compute kernels.
 
 Models are **not** in the package; they download once from Hugging Face into
-`~/.local/share/PapegaAI/models` (base 142 MB · small 466 MB · turbo 1.6 GB).
+`~/.local/share/PapegaAI/models` (base 142 MB · small 466 MB · medium 1.5 GB ·
+turbo 1.6 GB · large-v3 2.9 GB).
 After that everything runs fully offline — audio never leaves the machine.
 
 ## Known limits
