@@ -2,7 +2,7 @@
 ; Vereist dat `dotnet publish -o dist` eerst is gedraaid (zie README).
 
 #define MyAppName "PapegaAI"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.1.0"
 #define MyAppExeName "PapegaAI.exe"
 
 [Setup]
