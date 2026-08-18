@@ -105,11 +105,14 @@ Config lives in `~/.config/PapegaAI/config.json`; models and history in
 
 ```json
 { "model": "whisper-large-v3-turbo", "gpu": true, "language": "nl",
-  "hotkey": "right-ctrl", "overlay": true,
+  "hotkey": "right-ctrl", "overlay": true, "leading_space": true,
   "injection": "auto", "paste_shortcut": "ctrl+v",
   "hotkey_backend": "auto", "audio_device": null }
 ```
 
+- `leading_space` — type a space before each transcript so back-to-back
+  dictations do not run together. On by default; the history keeps the text
+  without it.
 - `injection` — `auto`, `xdotool`, `wtype`, `ydotool`, `uinput`, `clipboard`.
 - `paste_shortcut` — `ctrl+v`, or `ctrl+shift+v` if you mostly dictate into a
   terminal (the clipboard routes press this for you).

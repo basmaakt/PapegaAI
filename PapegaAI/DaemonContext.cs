@@ -33,6 +33,7 @@ sealed class DaemonContext : ApplicationContext
     RecordingOverlay? overlay;
     string hotkeyName;
     bool clearHistoryOnReboot;
+    bool leadingSpace;
     string? cpuModel;
     readonly bool useGpu;
     SettingsForm? settingsForm;
@@ -47,9 +48,11 @@ sealed class DaemonContext : ApplicationContext
         bool dumpWav,
         bool noOverlay,
         bool clearHistoryOnReboot,
+        bool leadingSpace,
         string? cpuModel,
         bool useGpu)
     {
+        this.leadingSpace = leadingSpace;
         this.cpuModel = cpuModel;
         this.useGpu = useGpu;
         this.transcriber = transcriber;
@@ -145,7 +148,7 @@ sealed class DaemonContext : ApplicationContext
                 history.Add(seconds, text);
                 ui.Post(_ =>
                 {
-                    injector.Inject(text);
+                    injector.Inject(OutputFormatting.ForInjection(text, leadingSpace));
                     overlay?.Hide();
                     tray.SetRecording(false);
                     if (settingsForm is { IsDisposed: false })
@@ -187,6 +190,7 @@ sealed class DaemonContext : ApplicationContext
         Hotkey = hotkeyName,
         Overlay = overlay is not null,
         ClearHistoryOnReboot = clearHistoryOnReboot,
+        LeadingSpace = leadingSpace,
     };
 
     void ApplySettings(Config config)
@@ -205,6 +209,9 @@ sealed class DaemonContext : ApplicationContext
 
         // Geldt vanaf de eerstvolgende start; geen herstart nodig.
         clearHistoryOnReboot = config.ClearHistoryOnReboot ?? false;
+
+        // Geldt meteen: de spatie wordt per dictaat bepaald.
+        leadingSpace = config.LeadingSpace ?? OutputFormatting.LeadingSpaceByDefault;
 
         // Alleen relevant bij een CPU-start; op een GPU-machine volstaat opslaan.
         bool cpuModelChanged = config.CpuModel != cpuModel;

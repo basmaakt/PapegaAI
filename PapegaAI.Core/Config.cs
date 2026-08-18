@@ -19,6 +19,11 @@ public sealed class Config
     [JsonPropertyName("overlay")] public bool? Overlay { get; set; }
     [JsonPropertyName("clear_history_on_reboot")] public bool? ClearHistoryOnReboot { get; set; }
 
+    /// <summary>Type a space before the transcript, so dictating twice in a
+    /// row does not run the words together. Default on; see
+    /// <see cref="Transcription.OutputFormatting.ForInjection"/>.</summary>
+    [JsonPropertyName("leading_space")] public bool? LeadingSpace { get; set; }
+
     /// <summary>Linux only: how transcripts reach the focused window —
     /// "auto" (default), "xdotool", "wtype", "uinput" or "clipboard".
     /// Ignored on Windows, which always uses SendInput.</summary>

@@ -100,7 +100,7 @@ Defaults live in `%LOCALAPPDATA%\PapegaAI\config.json` (flags override it):
 ```json
 { "model": "whisper-large-v3-turbo", "cpu_model": "whisper-small", "gpu": true,
   "language": "auto", "hotkey": "right-ctrl", "overlay": true,
-  "clear_history_on_reboot": false }
+  "clear_history_on_reboot": false, "leading_space": true }
 ```
 
 When a GPU is wanted (`gpu` on) but no GPU runtime loads, models larger than
@@ -113,6 +113,12 @@ on any CPU run. The tray menu and settings window show the active runtime.
 `gpu` (default `true`; checkbox in the settings window, or `--no-gpu` on the
 command line) disables GPU acceleration entirely — PapegaAI then runs on the CPU
 and, when set, switches to `cpu_model` automatically.
+
+`leading_space` (default `true`, checkbox in the settings window) types a space
+before each transcript, so dictating twice in a row does not run the words
+together. The cost is one stray space when you dictate into an empty field —
+easier to delete than a missing space is to insert mid-word. The history stores
+the text without it.
 
 `clear_history_on_reboot` (also a checkbox in the settings window) wipes the
 dictation history on the first PapegaAI start after a Windows reboot — a

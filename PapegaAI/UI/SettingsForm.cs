@@ -37,6 +37,7 @@ sealed class SettingsForm : Form
     readonly CheckBox overlayBox = new() { Text = "Overlay (pilletje) tonen tijdens opname", AutoSize = true };
     readonly CheckBox autostartBox = new() { Text = "PapegaAI starten bij inloggen", AutoSize = true };
     readonly CheckBox clearHistoryBox = new() { Text = "Geschiedenis wissen na herstart van de computer", AutoSize = true };
+    readonly CheckBox leadingSpaceBox = new() { Text = "Spatie voor de tekst zetten (sluit aan bij dicteren op dicteren)", AutoSize = true };
     readonly ListView historyList = new()
     {
         View = View.Details,
@@ -143,6 +144,7 @@ sealed class SettingsForm : Form
         overlayBox.Checked = current.Overlay ?? true;
         autostartBox.Checked = Install.IsEnabled();
         clearHistoryBox.Checked = current.ClearHistoryOnReboot ?? false;
+        leadingSpaceBox.Checked = current.LeadingSpace ?? Parrot.Transcription.OutputFormatting.LeadingSpaceByDefault;
 
         var grid = new TableLayoutPanel
         {
@@ -172,6 +174,7 @@ sealed class SettingsForm : Form
         AddRow("", overlayBox);
         AddRow("", autostartBox);
         AddRow("", clearHistoryBox);
+        AddRow("", leadingSpaceBox);
 
         grid.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         grid.Controls.Add(new PictureBox
@@ -290,6 +293,7 @@ sealed class SettingsForm : Form
             Hotkey = hotkey,
             Overlay = overlayBox.Checked,
             ClearHistoryOnReboot = clearHistoryBox.Checked,
+            LeadingSpace = leadingSpaceBox.Checked,
         });
         Close();
     }

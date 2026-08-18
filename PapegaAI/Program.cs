@@ -229,6 +229,7 @@ static class RunCommand
         using var context = new DaemonContext(
             transcriber, model, language, hotkey.Value, hotkeyName, debugHotkey, dumpWav, noOverlay,
             clearHistoryOnReboot: config.ClearHistoryOnReboot ?? false,
+            leadingSpace: config.LeadingSpace ?? OutputFormatting.LeadingSpaceByDefault,
             cpuModel: config.CpuModel,
             useGpu: useGpu);
 

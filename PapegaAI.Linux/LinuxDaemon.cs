@@ -163,7 +163,8 @@ sealed class LinuxDaemon : IDisposable
                 // Injection runs here, off the UI thread: xdotool and friends
                 // are processes, and blocking the dispatcher would freeze the
                 // overlay mid-animation.
-                injector.Inject(text);
+                injector.Inject(OutputFormatting.ForInjection(
+                    text, config.LeadingSpace ?? OutputFormatting.LeadingSpaceByDefault));
 
                 Dispatcher.UIThread.Post(() =>
                 {
@@ -214,6 +215,7 @@ sealed class LinuxDaemon : IDisposable
         Hotkey = hotkeyName,
         Overlay = overlay is not null,
         ClearHistoryOnReboot = config.ClearHistoryOnReboot,
+        LeadingSpace = config.LeadingSpace,
         Injection = config.Injection,
         PasteShortcut = config.PasteShortcut,
         HotkeyBackend = config.HotkeyBackend,

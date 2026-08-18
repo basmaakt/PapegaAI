@@ -73,6 +73,7 @@ sealed class SettingsWindow : Window
     readonly CheckBox overlayBox = new() { Content = "Overlay (pilletje) tonen tijdens opname" };
     readonly CheckBox autostartBox = new() { Content = "PapegaAI starten bij inloggen" };
     readonly CheckBox clearHistoryBox = new() { Content = "Geschiedenis wissen na herstart van de computer" };
+    readonly CheckBox leadingSpaceBox = new() { Content = "Spatie voor de tekst zetten (sluit aan bij dicteren op dicteren)" };
     readonly ListBox historyList = new();
     readonly TabControl tabs = new();
 
@@ -149,6 +150,7 @@ sealed class SettingsWindow : Window
         overlayBox.IsChecked = current.Overlay ?? true;
         autostartBox.IsChecked = autostart.IsEnabled;
         clearHistoryBox.IsChecked = current.ClearHistoryOnReboot ?? false;
+        leadingSpaceBox.IsChecked = current.LeadingSpace ?? Parrot.Transcription.OutputFormatting.LeadingSpaceByDefault;
 
         var grid = new Grid
         {
@@ -190,6 +192,7 @@ sealed class SettingsWindow : Window
         AddRow("", overlayBox);
         AddRow("", autostartBox);
         AddRow("", clearHistoryBox);
+        AddRow("", leadingSpaceBox);
 
         var status = new TextBlock
         {
@@ -352,6 +355,7 @@ sealed class SettingsWindow : Window
             Hotkey = (string)hotkeyBox.SelectedItem!,
             Overlay = overlayBox.IsChecked ?? true,
             ClearHistoryOnReboot = clearHistoryBox.IsChecked ?? false,
+            LeadingSpace = leadingSpaceBox.IsChecked ?? true,
             Injection = ValueOf(injectionBox),
             PasteShortcut = ValueOf(pasteBox),
             HotkeyBackend = ValueOf(backendBox),
