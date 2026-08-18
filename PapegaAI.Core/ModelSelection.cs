@@ -9,6 +9,12 @@ namespace Parrot;
 /// </summary>
 public static class ModelSelection
 {
+    /// <summary>Taal waarin zonder configuratie wordt getranscribeerd.
+    /// PapegaAI is een Nederlandse port en wordt in het Nederlands gebruikt;
+    /// "auto" laten detecteren kost nauwkeurigheid op korte fragmenten.
+    /// Meertalige modellen accepteren elke ISO-code via --language.</summary>
+    public const string DefaultLanguage = "nl";
+
     /// <summary>Resolve model id + language, enforcing that forced non-English
     /// languages get a multilingual model. Returns null after printing an
     /// error the user can act on.</summary>
@@ -33,7 +39,7 @@ public static class ModelSelection
         }
 
         bool multilingual = model.Languages.Contains("multi");
-        string language = languageArg ?? (multilingual ? "auto" : "en");
+        string language = languageArg ?? (multilingual ? DefaultLanguage : "en");
         if (!multilingual && language is not ("en" or "auto"))
         {
             Console.Error.WriteLine($"model {model.Id} is English-only, so `--language {language}` won't work.");

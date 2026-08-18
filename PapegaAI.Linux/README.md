@@ -120,8 +120,11 @@ Config lives in `~/.config/PapegaAI/config.json`; models and history in
 - `audio_device` — an ALSA name (`default`, `pulse`, `hw:1,0`), or prefix a
   helper to bypass ALSA entirely: `parec:alsa_input.usb-Blue_Yeti`.
 
-Everything else behaves exactly as on Windows, including the automatic fallback
-to `whisper-small` when a GPU was wanted but none loaded.
+Out of the box PapegaAI uses `whisper-large-v3-turbo` in Dutch. Everything else
+behaves exactly as on Windows, including the automatic fallback to
+`whisper-small` when a GPU was wanted but none loaded — so on a machine without
+one, set the model to `whisper-small` before the first run to avoid downloading
+1.6 GB that is then not used.
 
 ## Build
 

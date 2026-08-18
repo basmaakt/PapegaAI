@@ -28,7 +28,7 @@ public static class ModelRegistry
             Url: $"{Hub}/ggml-base.en.bin",
             SizeMB: 142,
             Languages: ["en"],
-            Recommended: true),
+            Recommended: false),
         new(
             Id: "whisper-small.en",
             DisplayName: "Whisper Small (English)",
@@ -60,7 +60,10 @@ public static class ModelRegistry
             Url: $"{Hub}/ggml-large-v3-turbo.bin",
             SizeMB: 1624,
             Languages: ["multi"],
-            Recommended: false),
+            // Het aanbevolen model: met een GPU is turbo zowel het snelste als
+            // het nauwkeurigste. Zonder GPU schakelt ModelSelection.AutoCpuFallback
+            // door naar whisper-small, want turbo op een CPU is trager dan praten.
+            Recommended: true),
     ];
 
     public static TranscriptionModel? Find(string id) =>

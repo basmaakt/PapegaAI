@@ -99,7 +99,7 @@ Defaults live in `%LOCALAPPDATA%\PapegaAI\config.json` (flags override it):
 
 ```json
 { "model": "whisper-large-v3-turbo", "cpu_model": "whisper-small", "gpu": true,
-  "language": "auto", "hotkey": "right-ctrl", "overlay": true,
+  "language": "nl", "hotkey": "right-ctrl", "overlay": true,
   "clear_history_on_reboot": false, "leading_space": true }
 ```
 
@@ -125,11 +125,20 @@ dictation history on the first PapegaAI start after a Windows reboot — a
 PapegaAI-only restart keeps it. Detection compares the boot time stored in
 `%LOCALAPPDATA%\PapegaAI\lastboot.txt` against the current uptime counter.
 
-**Dutch / multilingual:** the default `whisper-base.en` model is English-only.
-Use a model without `.en` (`whisper-base`, `whisper-small`,
-`whisper-large-v3-turbo`) with `"language": "auto"` for mixed Dutch/English,
-or `"language": "nl"` for Dutch-only (slightly faster and more robust on
-short clips).
+**Defaults:** out of the box PapegaAI uses `whisper-large-v3-turbo` in Dutch —
+with a GPU that is both the most accurate and the fastest choice. On a machine
+where no GPU runtime loads it switches to `whisper-small` by itself, since
+turbo on a CPU is slower than speaking.
+
+Set `"language": "auto"` for mixed Dutch/English, or any ISO code (`"en"`,
+`"de"`, …) to force another language. A forced language needs a multilingual
+model — one without `.en`. Sticking to a single language is slightly faster
+and noticeably more robust on short clips than auto-detection.
+
+Note for first runs on a laptop without a GPU: the recommended model is
+downloaded before its runtime is known, so 1.6 GB arrives and `whisper-small`
+is then used anyway. Pick `whisper-small` in the settings window first to skip
+that download.
 
 ## Stack — macOS original vs this port
 
