@@ -96,9 +96,9 @@ papegaai --debug-hotkey                  print every key event the backend sees
 
 Right-click the tray icon → **Instellingen…**: model, language, hotkey, GPU,
 overlay, autostart, and the two Linux-only choices — how the hotkey is watched
-and how text is inserted. The **Geschiedenis** tab keeps your last 100
-dictations with a copy button, which is what saves you when an injection
-misfires.
+and how text is inserted. **Geschiedenis…** in the same menu opens the window
+straight on the history tab, which keeps your last 100 dictations with a copy
+button — what saves you when an injection misfires.
 
 Config lives in `~/.config/PapegaAI/config.json`; models and history in
 `~/.local/share/PapegaAI/`:

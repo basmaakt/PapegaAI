@@ -21,6 +21,9 @@ namespace Parrot.UI;
 /// </summary>
 sealed class SettingsWindow : Window
 {
+    /// <summary>Volgorde waarin de tabbladen worden toegevoegd.</summary>
+    const int HistoryTabIndex = 1;
+
     static readonly (string Code, string Label)[] LanguageChoices =
     [
         ("auto", "Automatisch detecteren"),
@@ -71,6 +74,7 @@ sealed class SettingsWindow : Window
     readonly CheckBox autostartBox = new() { Content = "PapegaAI starten bij inloggen" };
     readonly CheckBox clearHistoryBox = new() { Content = "Geschiedenis wissen na herstart van de computer" };
     readonly ListBox historyList = new();
+    readonly TabControl tabs = new();
 
     readonly HistoryStore history;
     readonly Action<Config> onSave;
@@ -101,7 +105,6 @@ sealed class SettingsWindow : Window
         CanResize = true;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-        var tabs = new TabControl();
         tabs.Items.Add(new TabItem
         {
             Header = "Instellingen",
@@ -270,6 +273,14 @@ sealed class SettingsWindow : Window
         panel.Children.Add(historyList);
         RefreshHistory();
         return panel;
+    }
+
+    /// <summary>Open meteen op het geschiedenis-tabblad — het tray-menu heeft
+    /// daar een eigen ingang voor.</summary>
+    public void ShowHistory()
+    {
+        tabs.SelectedIndex = HistoryTabIndex;
+        RefreshHistory();
     }
 
     public void RefreshHistory()

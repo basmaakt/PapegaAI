@@ -1,4 +1,4 @@
-﻿using System.Drawing.Drawing2D;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Parrot.UI;
@@ -19,7 +19,8 @@ sealed class TrayController : IDisposable
     string idleText;
     bool recording;
 
-    public TrayController(string modelId, string runtime, string hotkeyName, Action onQuit, Action onOpenSettings)
+    public TrayController(string modelId, string runtime, string hotkeyName,
+        Action onQuit, Action onOpenSettings, Action onOpenHistory)
     {
         idleText = IdleText(hotkeyName);
         idleIcon = DrawIcon(recording: false);
@@ -34,6 +35,11 @@ sealed class TrayController : IDisposable
         var settings = new ToolStripMenuItem("Instellingen…");
         settings.Click += (_, _) => onOpenSettings();
         menu.Items.Add(settings);
+        // Aparte ingang naar de geschiedenis: dat tabblad is waar je heen wilt
+        // als een injectie misging, en dan is twee klikken er één te veel.
+        var historyItem = new ToolStripMenuItem("Geschiedenis…");
+        historyItem.Click += (_, _) => onOpenHistory();
+        menu.Items.Add(historyItem);
         menu.Items.Add(new ToolStripSeparator());
         var quit = new ToolStripMenuItem("PapegaAI afsluiten");
         quit.Click += (_, _) => onQuit();

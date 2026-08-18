@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 using Parrot.History;
 using Parrot.Models;
 
@@ -11,6 +11,9 @@ namespace Parrot.UI;
 /// </summary>
 sealed class SettingsForm : Form
 {
+    /// <summary>Volgorde waarin de tabbladen worden toegevoegd.</summary>
+    const int HistoryTabIndex = 1;
+
     static readonly (string Code, string Label)[] LanguageChoices =
     [
         ("auto", "Automatisch detecteren"),
@@ -41,6 +44,8 @@ sealed class SettingsForm : Form
         Dock = DockStyle.Fill,
         MultiSelect = false,
     };
+
+    readonly TabControl tabs = new() { Dock = DockStyle.Fill };
 
     readonly HistoryStore history;
     readonly Action<Config> onSave;
@@ -76,7 +81,6 @@ sealed class SettingsForm : Form
         StartPosition = FormStartPosition.CenterScreen;
         ClientSize = new Size(560, 505);
 
-        var tabs = new TabControl { Dock = DockStyle.Fill };
         tabs.TabPages.Add(BuildSettingsTab(current));
         tabs.TabPages.Add(BuildHistoryTab());
         Controls.Add(tabs);
@@ -228,6 +232,14 @@ sealed class SettingsForm : Form
         page.Controls.Add(buttons);
         RefreshHistory();
         return page;
+    }
+
+    /// <summary>Open meteen op het geschiedenis-tabblad — het tray-menu heeft
+    /// daar een eigen ingang voor.</summary>
+    public void ShowHistory()
+    {
+        tabs.SelectedIndex = HistoryTabIndex;
+        RefreshHistory();
     }
 
     public void RefreshHistory()

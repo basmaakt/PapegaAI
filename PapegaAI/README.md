@@ -85,7 +85,8 @@ Models are cached in `%LOCALAPPDATA%\PapegaAI\models`.
 Right-click the tray icon → **Instellingen…** (or double-click the icon):
 choose model, language, and hotkey, toggle the overlay and launch-at-login.
 Saving applies hotkey/overlay changes immediately; a model or language change
-restarts the daemon. The **Geschiedenis** tab lists your last 100 dictations
+restarts the daemon. **Geschiedenis…** in the same menu opens the window straight on that tab.
+It lists your last 100 dictations
 (stored in `%LOCALAPPDATA%\PapegaAI\history.json`) with a copy button — handy
 when an injection ever misfires.
 

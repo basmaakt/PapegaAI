@@ -80,7 +80,7 @@ sealed class LinuxDaemon : IDisposable
         monitor.OnEvent += HandleHotkey;
 
         tray = new TrayController(model.Id, WhisperTranscriber.LoadedRuntime, hotkeyName,
-            Quit, OpenSettings);
+            Quit, () => OpenSettings(showHistory: false), () => OpenSettings(showHistory: true));
 
         if (LinuxSession.IsGnome)
             Console.Error.WriteLine(
@@ -187,11 +187,12 @@ sealed class LinuxDaemon : IDisposable
         tray.SetRecording(false);
     }
 
-    void OpenSettings() => Dispatcher.UIThread.Post(() =>
+    void OpenSettings(bool showHistory) => Dispatcher.UIThread.Post(() =>
     {
         if (settingsWindow is { } existing)
         {
             existing.Activate();
+            if (showHistory) existing.ShowHistory();
             return;
         }
 
@@ -201,6 +202,7 @@ sealed class LinuxDaemon : IDisposable
         window.Closed += (_, _) => settingsWindow = null;
         settingsWindow = window;
         window.Show();
+        if (showHistory) window.ShowHistory();
     });
 
     Config EffectiveConfig() => new()

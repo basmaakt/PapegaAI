@@ -22,7 +22,7 @@ sealed class TrayController : IDisposable
     bool recording;
 
     public TrayController(string modelId, string runtime, string hotkeyName,
-        Action onQuit, Action onOpenSettings)
+        Action onQuit, Action onOpenSettings, Action onOpenHistory)
     {
         idleText = IdleText(hotkeyName);
 
@@ -32,6 +32,11 @@ sealed class TrayController : IDisposable
         var settings = new NativeMenuItem("Instellingen…");
         settings.Click += (_, _) => onOpenSettings();
 
+        // Aparte ingang naar de geschiedenis: dat tabblad is waar je heen wilt
+        // als een injectie misging, en dan is twee klikken er één te veel.
+        var historyItem = new NativeMenuItem("Geschiedenis…");
+        historyItem.Click += (_, _) => onOpenHistory();
+
         var quit = new NativeMenuItem("PapegaAI afsluiten");
         quit.Click += (_, _) => onQuit();
 
@@ -40,6 +45,7 @@ sealed class TrayController : IDisposable
         menu.Items.Add(modelLabel);
         menu.Items.Add(new NativeMenuItemSeparator());
         menu.Items.Add(settings);
+        menu.Items.Add(historyItem);
         menu.Items.Add(new NativeMenuItemSeparator());
         menu.Items.Add(quit);
 

@@ -64,7 +64,8 @@ sealed class DaemonContext : ApplicationContext
         ui = SynchronizationContext.Current ?? new WindowsFormsSynchronizationContext();
 
         overlay = noOverlay ? null : new RecordingOverlay();
-        tray = new TrayController(model.Id, WhisperTranscriber.LoadedRuntime, hotkeyName, Quit, OpenSettings);
+        tray = new TrayController(model.Id, WhisperTranscriber.LoadedRuntime, hotkeyName,
+            Quit, () => OpenSettings(showHistory: false), () => OpenSettings(showHistory: true));
         capture = new AudioCapture();
         if (overlay is not null)
             capture.OnLevel = level => overlay.PushLevel(level);
@@ -163,16 +164,18 @@ sealed class DaemonContext : ApplicationContext
         });
     }
 
-    void OpenSettings()
+    void OpenSettings(bool showHistory)
     {
         if (settingsForm is { IsDisposed: false })
         {
             settingsForm.Activate();
+            if (showHistory) settingsForm.ShowHistory();
             return;
         }
         settingsForm = new SettingsForm(
             EffectiveConfig(), WhisperTranscriber.LoadedRuntime, history, ApplySettings);
         settingsForm.Show();
+        if (showHistory) settingsForm.ShowHistory();
     }
 
     Config EffectiveConfig() => new()
