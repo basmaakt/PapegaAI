@@ -56,7 +56,8 @@ remove the downloaded models/settings/history.
 ```
 
 Models are **not** in the package; they download once from Hugging Face into
-`%LOCALAPPDATA%\PapegaAI\models` (base 142 MB · small 466 MB · turbo 1.6 GB) —
+`%LOCALAPPDATA%\PapegaAI\models` (base 142 MB · small 466 MB · medium 1.5 GB ·
+turbo 1.6 GB · large-v3 2.9 GB) —
 on first `setup`/run, or in the background after picking a different model in
 the settings window. After that everything runs fully offline. Settings and
 history are per-machine (`%LOCALAPPDATA%\PapegaAI`).

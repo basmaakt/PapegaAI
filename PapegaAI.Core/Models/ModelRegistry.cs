@@ -54,6 +54,14 @@ public static class ModelRegistry
             Languages: ["multi"],
             Recommended: false),
         new(
+            Id: "whisper-medium",
+            DisplayName: "Whisper Medium (meertalig)",
+            FileName: "ggml-medium.bin",
+            Url: $"{Hub}/ggml-medium.bin",
+            SizeMB: 1462,
+            Languages: ["multi"],
+            Recommended: false),
+        new(
             Id: "whisper-large-v3-turbo",
             DisplayName: "Whisper Large v3 Turbo",
             FileName: "ggml-large-v3-turbo.bin",
@@ -64,6 +72,14 @@ public static class ModelRegistry
             // het nauwkeurigste. Zonder GPU schakelt ModelSelection.AutoCpuFallback
             // door naar whisper-small, want turbo op een CPU is trager dan praten.
             Recommended: true),
+        new(
+            Id: "whisper-large-v3",
+            DisplayName: "Whisper Large v3 (volledig, traagst)",
+            FileName: "ggml-large-v3.bin",
+            Url: $"{Hub}/ggml-large-v3.bin",
+            SizeMB: 2951,
+            Languages: ["multi"],
+            Recommended: false),
     ];
 
     public static TranscriptionModel? Find(string id) =>
