@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapegaAI.Core", "PapegaAI.Core\PapegaAI.Core.csproj", "{694308C0-3E26-4D21-A80F-39CACD2DA3AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapegaAI", "PapegaAI\PapegaAI.csproj", "{B59972D5-0C4A-42E0-8E27-7F4A2E5C764C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapegaAI.Linux", "PapegaAI.Linux\PapegaAI.Linux.csproj", "{777A4DB3-45CD-4F31-86D8-317B0ADB53CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{694308C0-3E26-4D21-A80F-39CACD2DA3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{694308C0-3E26-4D21-A80F-39CACD2DA3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{694308C0-3E26-4D21-A80F-39CACD2DA3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{694308C0-3E26-4D21-A80F-39CACD2DA3AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B59972D5-0C4A-42E0-8E27-7F4A2E5C764C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B59972D5-0C4A-42E0-8E27-7F4A2E5C764C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B59972D5-0C4A-42E0-8E27-7F4A2E5C764C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B59972D5-0C4A-42E0-8E27-7F4A2E5C764C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{777A4DB3-45CD-4F31-86D8-317B0ADB53CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{777A4DB3-45CD-4F31-86D8-317B0ADB53CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{777A4DB3-45CD-4F31-86D8-317B0ADB53CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{777A4DB3-45CD-4F31-86D8-317B0ADB53CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

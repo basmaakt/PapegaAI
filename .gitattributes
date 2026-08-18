@@ -1,0 +1,10 @@
+# Laat git regeleindes normaliseren, maar houd shellscripts op LF: met CRLF
+# weigert Linux ze uit te voeren ("bad interpreter").
+* text=auto
+*.sh text eol=lf
+*.iss text eol=crlf
+
+# Binaire bestanden nooit aanraken
+*.png binary
+*.ico binary
+*.bin binary

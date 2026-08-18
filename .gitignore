@@ -1,0 +1,24 @@
+# Build output
+bin/
+obj/
+dist/
+dist-linux*/
+installer-output/
+*.tar.gz
+*.user
+*.suo
+.vs/
+
+# De macOS-originelen staan hier alleen als naslag; het zijn eigen repo's
+# (github.com/digimata/parrot en /quill), geen onderdeel van deze port.
+/parrot/
+/quill/
+
+# Verzamelde links en kladjes uit de onderzoeksfase
+*.url
+/Parrot is een open source versie van wispr flow.txt
+/Quill is een open source versie van granola.txt
+/Schermafbeelding *.png
+
+# Modellen worden gedownload, nooit meegeleverd
+*.bin

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WinExe: no console window ever appears; CLI commands attach to the
+         parent terminal's console at startup instead. -->
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PapegaAI</AssemblyName>
+    <RootNamespace>Parrot</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <ApplicationIcon>papegaai.ico</ApplicationIcon>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Config, models, whisper, history and DSP are shared with the Linux
+         build; only the WASAPI/WinForms/Win32 half lives here. -->
+    <ProjectReference Include="..\PapegaAI.Core\PapegaAI.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="Whisper.net.Runtime" Version="1.*" />
+    <!-- GPU runtime: Vulkan works on any modern GPU (NVIDIA/AMD/Intel) via
+         the normal graphics driver, with automatic fallback to the CPU
+         runtime. CUDA deliberately omitted: it needs the NVIDIA toolkit
+         installed, adds ~400 MB, and Vulkan is just as fast here. -->
+    <PackageReference Include="Whisper.net.Runtime.Vulkan" Version="1.*" />
+  </ItemGroup>
+
+</Project>

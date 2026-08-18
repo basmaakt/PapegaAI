@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>papegaai</AssemblyName>
+    <RootNamespace>Parrot</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- Avalonia needs an explicit RID at publish time; the daemon itself is
+         RID-agnostic so `dotnet build` works on any machine. -->
+    <RuntimeIdentifiers>linux-x64;linux-arm64</RuntimeIdentifiers>
+    <SelfContained>false</SelfContained>
+    <ApplicationManifest />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The macaw, exported from the same drawing code the Windows tray uses.
+         LogicalName is pinned so the resource keys stay readable regardless of
+         RootNamespace. -->
+    <EmbeddedResource Include="Assets\*.png"
+                      LogicalName="PapegaAI.Linux.Assets.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PapegaAI.Core\PapegaAI.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.*" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.*" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
+    <PackageReference Include="Whisper.net.Runtime" Version="1.*" />
+    <!-- Same reasoning as the Windows build: Vulkan reaches every modern GPU
+         through the normal driver and falls back to CPU by itself. CUDA would
+         add ~400 MB and a toolkit dependency. -->
+    <PackageReference Include="Whisper.net.Runtime.Vulkan" Version="1.*" />
+  </ItemGroup>
+
+</Project>

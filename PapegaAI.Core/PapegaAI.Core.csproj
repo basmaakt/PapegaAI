@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Platform-neutral half of PapegaAI: config, models, whisper, history,
+         DSP. Everything that touches the OS (mic, hotkey, injection, UI,
+         autostart) lives behind the interfaces in Platform/ and is supplied by
+         PapegaAI (Windows) or PapegaAI.Linux. -->
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Parrot</RootNamespace>
+    <AssemblyName>PapegaAI.Core</AssemblyName>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- NAudio.Core is the cross-platform slice: WaveFormat, ISampleProvider
+         and the WDL resampler. The Windows-only WASAPI bits stay in the
+         Windows app. -->
+    <PackageReference Include="NAudio.Core" Version="2.2.1" />
+    <PackageReference Include="Whisper.net" Version="1.*" />
+  </ItemGroup>
+
+</Project>
