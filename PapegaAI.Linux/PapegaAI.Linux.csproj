@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>papegaai</AssemblyName>
+    <Version>1.1.0</Version>
     <RootNamespace>Parrot</RootNamespace>
     <InvariantGlobalization>true</InvariantGlobalization>
     <!-- Avalonia needs an explicit RID at publish time; the daemon itself is

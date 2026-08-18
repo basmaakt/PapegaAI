@@ -9,6 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>PapegaAI</AssemblyName>
+    <Version>1.1.0</Version>
     <RootNamespace>Parrot</RootNamespace>
     <InvariantGlobalization>true</InvariantGlobalization>
     <ApplicationIcon>papegaai.ico</ApplicationIcon>
