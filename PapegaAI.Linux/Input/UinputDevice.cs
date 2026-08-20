@@ -20,6 +20,10 @@ sealed class UinputDevice : IDisposable
     const string Node = "/dev/uinput";
     const int O_WRONLY = 1;
     const int O_NONBLOCK = 0x800;
+    // Keep the descriptor out of helper processes: one that outlives the
+    // daemon would hold the virtual keyboard open, so the device stays
+    // registered with the kernel after UI_DEV_DESTROY.
+    const int O_CLOEXEC = 0x80000;
 
     const int EV_SYN = 0;
     const int EV_KEY = 1;
@@ -60,7 +64,7 @@ sealed class UinputDevice : IDisposable
     public static bool IsAvailable()
     {
         if (!File.Exists(Node)) return false;
-        int probe = open(Node, O_WRONLY | O_NONBLOCK);
+        int probe = open(Node, O_WRONLY | O_NONBLOCK | O_CLOEXEC);
         if (probe < 0) return false;
         close(probe);
         return true;
@@ -70,7 +74,7 @@ sealed class UinputDevice : IDisposable
     /// rejects events for keys not declared up front.</param>
     public UinputDevice(IEnumerable<int> keys)
     {
-        fd = open(Node, O_WRONLY | O_NONBLOCK);
+        fd = open(Node, O_WRONLY | O_NONBLOCK | O_CLOEXEC);
         if (fd < 0)
             throw new InvalidOperationException(DescribePermissionProblem());
 

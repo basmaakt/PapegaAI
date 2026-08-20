@@ -22,6 +22,7 @@ sealed class OverlayWindow : Window
 
     public OverlayWindow()
     {
+        Title = "PapegaAI";
         SystemDecorations = SystemDecorations.None;
         Background = Brushes.Transparent;
         TransparencyLevelHint = [WindowTransparencyLevel.Transparent];
@@ -52,7 +53,7 @@ sealed class OverlayWindow : Window
             {
                 PlaceAtBottom();
                 Show();
-                MakeClickThrough();
+                ApplyWindowHints();
             }
         });
     }
@@ -74,12 +75,23 @@ sealed class OverlayWindow : Window
     }
 
     /// <summary>
-    /// Ask X to give the window an empty input region, so clicks land on
-    /// whatever is behind the pill. Avalonia has no API for this, but the
-    /// shape extension does exactly one thing and does it well. Best effort:
-    /// on a compositor where this fails the pill is merely clickable.
+    /// The two things X needs told about the pill, both after every show.
+    ///
+    /// The first is an empty input region, so clicks land on whatever is
+    /// behind the pill. Avalonia has no API for this, but the shape extension
+    /// does exactly one thing and does it well.
+    ///
+    /// The second is _NET_WM_STATE. Avalonia sets Topmost and ShowInTaskbar
+    /// once, when the window is first mapped, and most window managers drop
+    /// _NET_WM_STATE when a window is unmapped. The pill is hidden between
+    /// dictations, so from the second one on it would sit *behind* the window
+    /// being dictated into — the one place it must never be — and Cinnamon
+    /// would flash its window-list button on top of that.
+    ///
+    /// Best effort throughout: on a compositor where any of this fails the
+    /// pill is merely clickable or badly stacked, not broken.
     /// </summary>
-    void MakeClickThrough()
+    void ApplyWindowHints()
     {
         try
         {
@@ -93,6 +105,18 @@ sealed class OverlayWindow : Window
                 // ShapeInput = 2, ShapeSet = 0, Unsorted = 0; zero rectangles
                 // means "no part of this window accepts pointer events".
                 XShapeCombineRectangles(display, handle.Handle, 2, 0, 0, IntPtr.Zero, 0, 0, 0);
+
+                nint root = XDefaultRootWindow(display);
+                nint state = XInternAtom(display, "_NET_WM_STATE", false);
+                if (state != 0)
+                {
+                    SendStateChange(display, root, handle.Handle, state, StateAdd, "_NET_WM_STATE_ABOVE");
+                    SendStateChange(display, root, handle.Handle, state, StateAdd, "_NET_WM_STATE_SKIP_TASKBAR");
+                    SendStateChange(display, root, handle.Handle, state, StateAdd, "_NET_WM_STATE_SKIP_PAGER");
+                    SendStateChange(display, root, handle.Handle, state, StateRemove,
+                        "_NET_WM_STATE_DEMANDS_ATTENTION");
+                }
+
                 XFlush(display);
             }
             finally
@@ -102,9 +126,38 @@ sealed class OverlayWindow : Window
         }
         catch
         {
-            // No X11, no shape extension — the pill stays clickable, which is
-            // cosmetic rather than broken.
+            // No X11, no shape extension — cosmetic rather than broken.
         }
+    }
+
+    const int StateRemove = 0;
+    const int StateAdd = 1;
+    const int ClientMessage = 33;
+    const int XEventSize = 192;                    // sizeof(union XEvent) on LP64
+    static readonly nint StructureMask = (1 << 20) | (1 << 19);   // Redirect | Notify
+
+    /// <summary>Add or remove one _NET_WM_STATE property, the way the EWMH
+    /// spec prescribes: a client message to the root window, which the window
+    /// manager picks up and acts on.</summary>
+    static void SendStateChange(nint display, nint root, nint window, nint stateAtom,
+        int action, string property)
+    {
+        nint atom = XInternAtom(display, property, false);
+        if (atom == 0) return;
+
+        // XClientMessageEvent, laid out for 64-bit: type, serial, send_event,
+        // display, window, message_type, format, then data.l[5].
+        var ev = new byte[XEventSize];
+        BitConverter.GetBytes(ClientMessage).CopyTo(ev, 0);
+        BitConverter.GetBytes((long)display).CopyTo(ev, 24);
+        BitConverter.GetBytes((long)window).CopyTo(ev, 32);
+        BitConverter.GetBytes((long)stateAtom).CopyTo(ev, 40);
+        BitConverter.GetBytes(32).CopyTo(ev, 48);          // format: 32-bit data
+        BitConverter.GetBytes((long)action).CopyTo(ev, 56);   // data.l[0]
+        BitConverter.GetBytes((long)atom).CopyTo(ev, 64);     // data.l[1]
+        BitConverter.GetBytes(1L).CopyTo(ev, 80);            // data.l[3]: normal app
+
+        XSendEvent(display, root, false, StructureMask, ev);
     }
 
     [DllImport("libX11.so.6")]
@@ -115,6 +168,17 @@ sealed class OverlayWindow : Window
 
     [DllImport("libX11.so.6")]
     static extern int XFlush(nint display);
+
+    [DllImport("libX11.so.6")]
+    static extern nint XDefaultRootWindow(nint display);
+
+    [DllImport("libX11.so.6")]
+    static extern nint XInternAtom(nint display,
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string name, bool onlyIfExists);
+
+    [DllImport("libX11.so.6")]
+    static extern int XSendEvent(nint display, nint window, bool propagate,
+        nint eventMask, byte[] eventSend);
 
     [DllImport("libXext.so.6")]
     static extern void XShapeCombineRectangles(nint display, nint window, int destKind,

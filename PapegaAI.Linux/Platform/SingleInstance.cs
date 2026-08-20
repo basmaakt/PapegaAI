@@ -13,6 +13,12 @@ sealed class SingleInstance : IDisposable
 {
     const int O_RDWR = 2;
     const int O_CREAT = 0x40;
+    // Without this the lock descriptor is inherited by every helper the
+    // daemon starts. xclip is the one that bites: it stays alive in the
+    // background to serve the clipboard selection, so it would keep the
+    // lock long after PapegaAI itself has gone — and the next start, or a
+    // restart after a settings change, would refuse with "draait al".
+    const int O_CLOEXEC = 0x80000;
     const int LOCK_EX = 2;
     const int LOCK_NB = 4;
     const int LOCK_UN = 8;
@@ -43,7 +49,7 @@ sealed class SingleInstance : IDisposable
     {
         string path = System.IO.Path.Combine(Paths.RuntimeDir, "papegaai.lock");
 
-        int fd = open(path, O_RDWR | O_CREAT, Convert.ToInt32("600", 8));
+        int fd = open(path, O_RDWR | O_CREAT | O_CLOEXEC, Convert.ToInt32("600", 8));
         if (fd < 0)
         {
             // Without a lock file we cannot tell; better to run than to refuse.

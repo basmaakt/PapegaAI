@@ -18,6 +18,9 @@ sealed class EvdevHotkeyMonitor : IHotkeyMonitor
 {
     const int O_RDONLY = 0;
     const int O_NONBLOCK = 0x800;
+    // Every open keyboard would otherwise be handed to xdotool, xclip and
+    // notify-send along with the rest of the environment.
+    const int O_CLOEXEC = 0x80000;
     const short POLLIN = 0x001;
     const int EV_KEY = 1;
     const int EINTR = 4;
@@ -86,7 +89,7 @@ sealed class EvdevHotkeyMonitor : IHotkeyMonitor
         foreach (string path in Directory.EnumerateFiles("/dev/input", "event*").OrderBy(p => p))
         {
             sawDevice = true;
-            int fd = open(path, O_RDONLY | O_NONBLOCK);
+            int fd = open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
             if (fd < 0) continue;                    // not ours to read; skip quietly
 
             if (!ProducesKey(fd, keyCode))
@@ -209,7 +212,7 @@ sealed class EvdevHotkeyMonitor : IHotkeyMonitor
         if (!Directory.Exists("/dev/input")) return false;
         foreach (string path in Directory.EnumerateFiles("/dev/input", "event*"))
         {
-            int fd = open(path, O_RDONLY | O_NONBLOCK);
+            int fd = open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
             if (fd >= 0)
             {
                 close(fd);
