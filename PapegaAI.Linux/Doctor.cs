@@ -92,7 +92,19 @@ static class Doctor
         // Clipboard-only means the user still has to press Ctrl+V themselves —
         // it works, but it is not the experience the app promises.
         bool typesByItself = !injector.Mechanism.StartsWith("clipboard");
-        return new Check("tekst invoegen", typesByItself, injector.Mechanism,
+
+        // Everything except xdotool goes through the clipboard, which means the
+        // transcript briefly replaces whatever you had copied. On X11 that is
+        // avoidable and worth saying, since the route works either way.
+        string detail = injector.Mechanism;
+        if (typesByItself && LinuxSession.IsX11 && !injector.Mechanism.StartsWith("xdotool")
+            && !Which.Exists("xdotool"))
+        {
+            detail += " — xdotool typt op X11 rechtstreeks, zonder het klembord " +
+                      "te gebruiken: `sudo apt install xdotool`";
+        }
+
+        return new Check("tekst invoegen", typesByItself, detail,
             typesByItself
                 ? null
                 : "Alleen het klembord is beschikbaar: PapegaAI plakt de tekst niet zelf. " +
