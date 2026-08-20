@@ -84,7 +84,7 @@ static class Program
         }
         catch (Exception ex)
         {
-            Fatal($"error: {ex.Message}");
+            Fatal($"error: {ex.Message}{CrashLog.Record(ex)}");
             return 1;
         }
     }
