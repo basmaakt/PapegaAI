@@ -236,6 +236,12 @@ sealed class SettingsWindow : Window
     {
         historyList.ItemTemplate = new FuncDataTemplate<HistoryRow>((row, _) =>
         {
+            // The virtualising panel clears a container's Content before it recycles
+            // it, and that null arrives here as a row to build. Without this guard the
+            // NullReferenceException escapes the layout pass and takes down the daemon,
+            // so scrolling the history far enough was enough to lose the tray icon.
+            if (row is null) return new Grid();
+
             var line = new Grid { ColumnDefinitions = ColumnDefinitions.Parse("110,60,*") };
             var time = new TextBlock { Text = row.Time, Opacity = 0.7 };
             var duration = new TextBlock { Text = row.Duration, Opacity = 0.7 };
